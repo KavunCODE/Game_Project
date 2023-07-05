@@ -682,6 +682,7 @@ GameObject:
   - component: {fileID: 1202961146}
   - component: {fileID: 1202961145}
   - component: {fileID: 1202961150}
+  - component: {fileID: 1202961151}
   m_Layer: 0
   m_Name: MainChar
   m_TagString: Untagged
@@ -698,7 +699,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1202961144}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90ad12ea341a70f47b06a82e4bbc8fb1, type: 3}
+  m_Script: {fileID: 11500000, guid: b03e6497d08df714ca2d7a0aa11b7ccc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 1202961147}
@@ -833,6 +834,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70bde8514831f6d44abc738816563397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &1202961151
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1202961144}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d474178ae6163694aa5cf137adbba18c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1280046628
 GameObject:
   m_ObjectHideFlags: 0

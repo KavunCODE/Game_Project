@@ -8,12 +8,12 @@ public class MainCharMovement : MonoBehaviour
     private float speed = 8f;
     private float jumpHeight = 16f;
     private bool isFacingRight = true;
+    public Animator animator;
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
     // Start is called before the first frame update
-
 
 
     private void Start()
@@ -35,9 +35,21 @@ public class MainCharMovement : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
 
+        if (Input.GetKey(KeyCode.E))
+        {
+            animator.SetBool("punch", true);
+            StartCoroutine(Cooldown(0.533f));
+        }
+
         Flip();
     }
-    
+
+    private IEnumerator Cooldown(float cooldown)
+    {
+        yield return new WaitForSeconds(cooldown);
+        animator.SetBool("punch", false);
+    }
+
     private void FixedUpdate()
     {
         rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);

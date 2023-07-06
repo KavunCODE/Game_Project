@@ -13,4 +13,5 @@ Minimal requirements:
 8) couple monsters dealing damage at least when touching the main character
 9) Economical system
 10) Exp system
-11) Minimal balance 
+11) Minimal balance
+12) Animations ✓

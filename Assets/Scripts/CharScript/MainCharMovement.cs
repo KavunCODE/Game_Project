@@ -8,66 +8,85 @@ public class MainCharMovement : MonoBehaviour
     private float speed = 8f;
     private float jumpHeight = 16f;
     private bool isFacingRight = true;
-    public Animator animator;
 
-    [SerializeField] private Rigidbody2D rb;
+    public Animator animator;
+    private Rigidbody2D rb;
+
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
-    // Start is called before the first frame update
 
+    private bool isJumping = false;
+    private bool isFalling = false;
+    private bool isPunching = false;
 
-    private void Start()
+    private void Awake()
     {
-        
+        animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
     }
-    // Update is called once per frame
-    void Update()
+
+    private void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+            isJumping = true;
         }
 
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
+        if (Input.GetKey(KeyCode.E) && !isPunching)
         {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            isPunching = true;
         }
 
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetKey(KeyCode.Space) && rb.velocity.y > 0f)
         {
-            animator.SetBool("punch", true);
-            StartCoroutine(Cooldown(0.533f));
+            isJumping = true;
         }
 
+        if (rb.velocity.y < 0f && !IsGrounded())
+        {
+            isFalling = true;
+        }
+
+        UpdateAnimations();
         Flip();
     }
 
-    private IEnumerator Cooldown(float cooldown)
-    {
-        yield return new WaitForSeconds(cooldown);
-        animator.SetBool("punch", false);
-    }
-
-    private void FixedUpdate()
-    {
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-    }
-
-    private bool IsGrounded()
-    {
-        return Physics2D.OverlapCircle(groundCheck.position, 1.2f, groundLayer);
-    }
-
-    private void Flip()
-    {
-        if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
+        private void FixedUpdate()
         {
-            isFacingRight = !isFacingRight;
-            Vector3 localScale = transform.localScale;
-            localScale.x *= -1f;
-            transform.localScale = localScale;
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
         }
+
+        private void UpdateAnimations()
+        {
+            animator.SetBool("jump", isJumping);
+            animator.SetBool("fall", isFalling);            
+            animator.SetBool("punch", isPunching);            
+
+            isJumping = false;
+            isFalling = false;
+        }
+        private void EndPunch()
+        {
+            isPunching = false;
+            Debug.Log("Punch animation ended. isPunching set to false.");
     }
+
+        private bool IsGrounded()
+        {
+            return Physics2D.OverlapCircle(groundCheck.position, 1.2f, groundLayer);
+        }
+
+        private void Flip()
+        {
+            if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
+            {
+                isFacingRight = !isFacingRight;
+                Vector3 localScale = transform.localScale;
+                localScale.x *= -1f;
+                transform.localScale = localScale;
+            }
+        }
 }

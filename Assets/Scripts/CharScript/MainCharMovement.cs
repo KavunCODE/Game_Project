@@ -4,7 +4,17 @@ using UnityEngine;
 
 public class MainCharMovement : MonoBehaviour
 {
-    private float horizontal;
+    [SerializeField] private bioMuscleEnemy enemy; // Reference to the enemy in the Inspector
+
+    private void Start()
+    {
+        if (enemy != null)
+        {
+            enemy.SetTarget(transform);
+        }
+    }
+
+    private float horizontalVelocity;
     private float speed = 8f;
     private float jumpHeight = 16f;
     private bool isFacingRight = true;
@@ -27,7 +37,7 @@ public class MainCharMovement : MonoBehaviour
 
     private void Update()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
+        horizontalVelocity = Input.GetAxisRaw("Horizontal");
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
@@ -56,7 +66,7 @@ public class MainCharMovement : MonoBehaviour
 
         private void FixedUpdate()
         {
-            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+            rb.velocity = new Vector2(horizontalVelocity * speed, rb.velocity.y);
         }
 
         private void UpdateAnimations()
@@ -71,8 +81,7 @@ public class MainCharMovement : MonoBehaviour
         private void EndPunch()
         {
             isPunching = false;
-            Debug.Log("Punch animation ended. isPunching set to false.");
-    }
+        }
 
         private bool IsGrounded()
         {
@@ -81,7 +90,7 @@ public class MainCharMovement : MonoBehaviour
 
         private void Flip()
         {
-            if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
+            if (isFacingRight && horizontalVelocity < 0f || !isFacingRight && horizontalVelocity > 0f)
             {
                 isFacingRight = !isFacingRight;
                 Vector3 localScale = transform.localScale;

@@ -9,46 +9,78 @@ public class bioMuscleEnemy : MonoBehaviour
     private Vector2 moveDir;
     public Animator animator;
     private Rigidbody2D rb;
+    private bool isFacingRight = true;
 
-    public static event Action<bioMuscleEnemy> OnbioMuscleEnemyKilled;
+    public void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+    }
+
 
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private float health, maxHealth = 3f;
-    [SerializeField] private float moveSpeed = 6f;
-    private bool isFacingLeft = true;
+
+    [SerializeField] private float moveSpeed = 4f;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>(); 
+        target = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     private void Start()
     {
-        target = GameObject.Find("MainChar").transform;
+        rb = GetComponent<Rigidbody2D>();
     }
-
     private void Update()
     {
-        if (target)
-        {
-
-            Vector3 direction = (target.position - transform.position).normalized;
-
-            rb.velocity = direction * moveSpeed;
-        }
+        Flip();
     }
-
-    public void TakeDamage(float damageAmount)
+    private void FixedUpdate()
     {
-        health -= damageAmount;
-        if (health <= 0)
+        if (target != null)
         {
-            Destroy(gameObject);
-            OnbioMuscleEnemyKilled?.Invoke(this);
+            // Calculate the direction from the enemy to the player
+            Vector2 direction = (target.position - transform.position).normalized;
+
+            // Calculate the new velocity based on the direction and desired speed
+            Vector2 newVelocity = direction * moveSpeed;
+
+            // Clamp the velocity magnitude to the maximum speed
+            if (newVelocity.magnitude > moveSpeed || newVelocity.magnitude < moveSpeed)
+            {
+                newVelocity = newVelocity.normalized * moveSpeed;
+            }
+
+            // Set the new velocity
+            rb.velocity = new Vector2(newVelocity.x, rb.velocity.y);
+        }
+
+    }
+
+    private void Flip()
+    {
+        // Get the horizontal velocity
+        float horizontalVelocity = rb.velocity.x;
+
+        // Check the sign of the horizontal velocity to determine the direction
+        if ((horizontalVelocity > 0 && !isFacingRight) || (horizontalVelocity < 0 && isFacingRight))
+        {
+            // Toggle the facing direction
+            isFacingRight = !isFacingRight;
+
+            // Flip the character's sprite
+            Vector3 localScale = transform.localScale;
+            localScale.x *= -1f;
+            transform.localScale = localScale;
+
+            Debug.Log("Flipped");
         }
     }
+
 }
+
+
 
 

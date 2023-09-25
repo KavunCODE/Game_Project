@@ -6,21 +6,21 @@ using UnityEngine;
 public class bioMuscleEnemy : MonoBehaviour
 {
     private Transform target;
-    private Vector2 moveDir;
     public Animator animator;
     private Rigidbody2D rb;
     private bool isFacingRight = true;
+
+    public static event Action<bioMuscleEnemy> OnEnemyKilled;
+
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] float health, maxHealth = 3f;
+    [SerializeField] private float moveSpeed = 4f;
 
     public void SetTarget(Transform newTarget)
     {
         target = newTarget;
     }
-
-
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private LayerMask groundLayer;
-
-    [SerializeField] private float moveSpeed = 4f;
 
     private void Awake()
     {
@@ -31,7 +31,7 @@ public class bioMuscleEnemy : MonoBehaviour
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        health = maxHealth;
     }
     private void Update()
     {
@@ -75,7 +75,16 @@ public class bioMuscleEnemy : MonoBehaviour
             localScale.x *= -1f;
             transform.localScale = localScale;
 
-            Debug.Log("Flipped");
+        }
+    }
+
+    public void TakeDamage(float damageAmount)
+    {
+        health -= damageAmount;
+        if (health < 0)
+        {
+            Destroy(gameObject);
+            OnEnemyKilled?.Invoke(this);
         }
     }
 

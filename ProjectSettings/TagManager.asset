@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Teleport
+  - GlobalLight
+  - TilemapGlobalLight
+  - Enemy
   layers:
   - Default
   - TransparentFX

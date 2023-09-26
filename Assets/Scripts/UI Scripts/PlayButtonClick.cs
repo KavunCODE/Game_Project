@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayButtonClick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
@@ -21,5 +22,6 @@ public class PlayButtonClick : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     {
         img.sprite = defaultbut;
         source.PlayOneShot(uncompressedClip);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

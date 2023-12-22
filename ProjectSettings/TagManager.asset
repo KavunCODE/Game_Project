@@ -8,6 +8,7 @@ TagManager:
   - GlobalLight
   - TilemapGlobalLight
   - Enemy
+  - Weapoon
   layers:
   - Default
   - TransparentFX

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class bioMuscleEnemy : MonoBehaviour
@@ -14,8 +15,18 @@ public class bioMuscleEnemy : MonoBehaviour
 
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField] float health, maxHealth = 3f;
+    [SerializeField] float health, maxHealth = 20f;
     [SerializeField] private float moveSpeed = 4f;
+
+    private bool _hitCounter;
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.CompareTag("Weapoon"))
+        {
+            TakeDamage(10f);
+        }
+    }
 
     public void SetTarget(Transform newTarget)
     {
@@ -80,6 +91,7 @@ public class bioMuscleEnemy : MonoBehaviour
 
     public void TakeDamage(float damageAmount)
     {
+        Debug.Log("Took some DMG ENEMY");
         health -= damageAmount;
         if (health < 0)
         {
